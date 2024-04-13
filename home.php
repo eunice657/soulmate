@@ -225,7 +225,7 @@
     <hr class="my-4">
     <p>Try again with a different combination to see if there are more</p>
     <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Search <i class="fas fa-search"></i></a>
+    <a class="btn btn-primary btn-lg" href="./php/search.php" role="button">Search <i class="fas fa-search"></i></a>
     </p>
   </div>
 </div>
@@ -233,9 +233,9 @@
 
 <!-- POPOVERS -->
 <ul id="popover-content-profile-icon" class="list-group" style="display: none;">
- <span class="list-group-item btn btn-outline-success rounded"><a href="profile.php"> profile</a></span>
+ <span class="list-group-item btn btn-outline-success rounded"><a href="edit-profile.php"> profile</a></span>
  <div class="dropdown-divider"></div>
- <span class="list-group-item btn btn-outline-danger rounded"><a href="php/logout.php?logout_id=<?php echo $_SESSION['unique_id']; ?>" class="">Logout</a></span>
+ <span class="list-group-item btn btn-outline-danger rounded"><a href="./php/logout.php?logout_id=<?php echo $_SESSION['unique_id']; ?>" class="">Logout</a></span>
 </ul>
 
 <ul id="popover-content-matches" class="list-group" style="display: none;">

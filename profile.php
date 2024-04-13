@@ -131,7 +131,7 @@ if($email != false && $password != false){
  }
  
  // Output the hobbies
- echo "Common hobbies for user with ID $uid: " . implode(", ", $common_hobbies);
+//  echo "Common hobbies for user with ID $uid: " . implode(", ", $common_hobbies);
  
  
 ?>
@@ -145,7 +145,7 @@ if($email != false && $password != false){
     <title>Profile</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style-form-profile.css">
+    <link rel="stylesheet" href="./css/style-form-profile.css">
 
     <style>
      #delete-icon {
