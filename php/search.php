@@ -15,7 +15,7 @@ if (isset($_POST['searchTerm'])) {
     // Check if query was successful and if there are results
     if ($query3 && mysqli_num_rows($query3) > 0) {
         // Include file to process and display data
-        include_once "./php/data.php";
+        include_once "data.php";
     } else {
         $output .= 'No user found related to your search term';
     }
