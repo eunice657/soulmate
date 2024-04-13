@@ -10,52 +10,82 @@ function consoleLog($x) {
     echo '<script type="text/javascript">' . 'console.log' . '(' . '"' . $x . '"' . ');</script>';
 }
 
-//if user signup button
-if(isset($_POST['signup'])){
-    //$name = mysqli_real_escape_string($con, $_POST['name']);
+// if user signup button
+if (isset($_POST['signup'])) {
+    // Retrieve user input
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
     $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
-    if($password !== $cpassword){
+
+    // Check if passwords match
+    if ($password !== $cpassword) {
         $errors['password'] = "Confirm password not matched!";
     }
-    $email_check = "SELECT * FROM usertable WHERE email = '$email'";
-    $res = mysqli_query($con, $email_check);
-    if(mysqli_num_rows($res) > 0){
-        $errors['email'] = "Email that you have entered already exist!";
-        header('Location: login-user.php');
+
+    // Check if email already exists
+    $email_check_query = "SELECT * FROM usertable WHERE email = '$email'";
+    $email_check_result = mysqli_query($con, $email_check_query);
+
+    // Check for errors in query execution
+    if (!$email_check_result) {
+        die('Error executing email check query: ' . mysqli_error($con));
     }
-    if(count($errors) === 0){
+
+    // Check if email already exists
+    if (mysqli_num_rows($email_check_result) > 0) {
+        $errors['email'] = "Email that you have entered already exists!";
+        // Redirect or handle the error as per your requirement
+        // header('Location: login-user.php');
+    }
+
+    // If there are no errors, proceed with user registration
+    if (count($errors) === 0) {
+        // Generate encrypted password
         $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $code = 0;
+        // Generate unique user ID
+        $ran_id = rand(time(), 100000000);
+        // Set initial user status and profile_created status
         $status = "verified";
         $profile_created = "no";
-        $ran_id = rand(time(), 100000000);
+        // Set user as active
         $active = "Active now";
-        $insert_data = "INSERT INTO usertable (email, password, code, status, profile_created, unique_id, active)
-                        values('$email', '$encpass', '$code', '$status', '$profile_created', '$ran_id', '$active')";
-        $data_check = mysqli_query($con, $insert_data);
-        if($data_check){
-            $subject = "Email Verification Code";
-            $message = "Your verification code is $code";
-            $sender = "From: SoulMate";
-            if(mail($email, $subject, $message, $sender)){
-                $info = "We've sent a verification code to your email - $email";
-                $_SESSION['info'] = $info;
-                $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
-                $_SESSION['unique_id'] = $ran_id;
-                header('location: profile-input.php');
-                exit();
-            }else{
-				header('location: profile-input.php');
-               // $errors['otp-error'] = "Failed while sending code!";
-            }
-        }else{
-            $errors['db-error'] = "Failed while inserting data into database!";
+
+        // Insert user data into the database
+        $insert_data_query = "INSERT INTO usertable (email, password, code, status, profile_created, unique_id, active)
+                            VALUES ('$email', '$encpass', 0, '$status', '$profile_created', '$ran_id', '$active')";
+
+        // Execute the insert query
+        $insert_data_result = mysqli_query($con, $insert_data_query);
+
+        // Check for errors in query execution
+        if (!$insert_data_result) {
+            die('Error executing insert query: ' . mysqli_error($con));
         }
+
+        // If data insertion is successful
+        // Send email verification code
+        $subject = "Email Verification Code";
+        $message = "Your verification code is 0"; // Adjust message as per your requirement
+        $sender = "From: SoulMate";
+        if (mail($email, $subject, $message, $sender)) {
+            $info = "We've sent a verification code to your email - $email";
+            $_SESSION['info'] = $info;
+            $_SESSION['email'] = $email;
+            $_SESSION['password'] = $password;
+            $_SESSION['unique_id'] = $ran_id;
+            header('Location: profile-input.php');
+            exit();
+        } else {
+            // Handle email sending failure
+            header('Location: profile-input.php');
+            // $errors['otp-error'] = "Failed while sending code!";
+        }
+    } else {
+        // Handle database insertion error
+        $errors['db-error'] = "Failed while inserting data into database!";
     }
 }
+
     //if user click verification code submit button
     if(isset($_POST['check'])){
         $_SESSION['info'] = "";
