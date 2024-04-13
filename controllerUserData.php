@@ -261,7 +261,7 @@ if (isset($_POST['signup'])) {
 
         //fetch the user of current session's uid
         $query = "SELECT uid FROM usertable WHERE email = '$email'";
-        $res = mysqli_query($con, $query);
+        $res = mysqli_query($con, $query); 
         if(mysqli_num_rows($res) > 0) {
             $fetch = mysqli_fetch_assoc($res);
             $uid = $fetch['uid'];
